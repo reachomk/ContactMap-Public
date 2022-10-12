@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#000080"
+        app:popupTheme="@style/AppTheme"
+        app:titleTextColor="#FFFFFF"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/toolbar"
+        android:text="ContactMap Help"
+        android:textSize="30sp"
+        android:padding="10dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title">
+    <TextView
+        android:padding="20dp"
+        android:id="@+id/aboutApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:text="ContactMap was built so you can see contacts in your vicinity for impromptu socializing. \n \nThe blue dot is your location, and magenta markers are your contacts' homes as listed in your contacts app. Click on a magenta marker in order to view the contact's contact card. \n \nDon't see any markers for your contacts? Try zooming out or go to your contacts app and add addresses to your contacts. \n \nIf your location isn't updating, its likely that you have low internet connectivity. Try switching from cellular data to wi-fi(or vice versa), or connect to a different network. \n \nNeed any other help or having issues with the app? Send us an email at reachomkapps@gmail.com or at our website https://sites.google.com/view/contactmap/home. "
+        android:textSize="25sp"
+        android:layout_marginTop="-20dp"/>
+    </ScrollView>
+
+</RelativeLayout>

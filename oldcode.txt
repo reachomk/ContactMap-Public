@@ -1,0 +1,169 @@
+    public void getFineLocPerms() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+            Log.e("Perms Granted", "Fine Loc");
+            updateLocationUI();
+            getDeviceLocation();
+            getContactPerms();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+
+    public void getContactPerms() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                Manifest.permission.READ_CONTACTS)
+                == PackageManager.PERMISSION_GRANTED) {
+            hasContactPerms = true;
+            Log.e("Perms Granted", "Contacts");
+            getCoarseLocPerms();
+        } else {
+           requestPermissions(new String[]{ Manifest.permission.READ_CONTACTS},
+                    PERMISSIONS_REQUEST_CONTACTS_READ);
+        }
+    }
+
+    public void getCoarseLocPerms() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Log.e("Perms Granted", "Coarse Loc");
+            getInternetPerms();
+        } else {
+            requestPermissions(new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+        }
+    }
+
+    public void getInternetPerms() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                Manifest.permission.INTERNET)
+                == PackageManager.PERMISSION_GRANTED) {
+            Log.e("Perms Granted", "Internet");
+            getContacts();
+        } else {
+            requestPermissions(new String[]{ Manifest.permission.INTERNET},
+                    PERMISSIONS_REQUEST_INTERNET);
+        }
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.e("requestcode", String.valueOf(requestCode));
+        Log.e("permissions", Arrays.toString(permissions));
+        Log.e("grantResults", Arrays.toString(grantResults));
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Log.e("Permissions", "Location");
+                    updateLocationUI();
+                    getDeviceLocation();
+                   // getContactPerms();
+                    getPerms();
+                }
+                else if(permissions.length == 0)  {
+                    //getFineLocPerms();
+                    getPerms();
+                }
+                else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+
+                    //Toast.makeText(this.getApplicationContext(), "Error: Fine Location permission denied. Quitting app.", Toast.LENGTH_LONG).show();
+                    //finishAndRemoveTask();
+                    new DenialDialog(this, requestCode).show(getSupportFragmentManager(), "tag");
+                }
+                return;
+            case PERMISSIONS_REQUEST_CONTACTS_READ:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app
+                    Log.e("Permissions", "Contacts");
+                   // getCoarseLocPerms();
+                    getPerms();
+                }
+                else if(permissions.length == 0)  {
+                    //getContactPerms();
+                    getPerms();
+                }
+                else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                   // Toast.makeText(this.getApplicationContext(), "Error: Contact permission denied. Quitting app.", Toast.LENGTH_LONG).show();
+                    //finishAndRemoveTask();
+                    new DenialDialog(this, requestCode).show(getSupportFragmentManager(), "tag");
+                }
+                return;
+            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Log.e("Permissions", "Coarse Location");
+                  //  getInternetPerms();
+                    getPerms();
+                }
+                else if(permissions.length == 0)  {
+                    //getCoarseLocPerms();
+                    getPerms();
+                }
+                else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                   // Toast.makeText(this.getApplicationContext(), "Error: Coarse Loc permission denied. Quitting app.", Toast.LENGTH_LONG).show();
+                   // finishAndRemoveTask();
+                    new DenialDialog(this, requestCode).show(getSupportFragmentManager(), "tag");                }
+                return;
+            case PERMISSIONS_REQUEST_INTERNET:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Log.e("Permissions", "Internet");
+                    getContacts();
+                }
+                else if(permissions.length == 0)  {
+                   // getInternetPerms();
+                    getPerms();
+                }
+                else if(grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_DENIED){
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                   // Toast.makeText(this.getApplicationContext(), "Error: Internet permission denied. Quitting app.", Toast.LENGTH_LONG).show();
+                   // finishAndRemoveTask();
+                    new DenialDialog(this, requestCode).show(getSupportFragmentManager(), "tag");
+                }
+                break; 
